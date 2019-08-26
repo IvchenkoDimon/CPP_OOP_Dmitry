@@ -40,6 +40,7 @@ public:
 
 	}
 	friend class ForwardList;
+	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
 };
 
 int Element::count = 0;
@@ -77,6 +78,26 @@ public:
 			push_back(*it);
 		}
 	}
+	ForwardList(const ForwardList& other)
+	{
+		this->Head = nullptr;
+		this->size = 0;
+		//Element* Temp = other.Head;	//Итератор нужен для того, чтобы перемещаться по ДРУГОМУ списку
+		//while (Temp)
+		//{
+		//	push_back(Temp->Data);
+		//	Temp = Temp->pNext;
+		//}
+		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)push_back(Temp->Data);
+		cout << "FLCopyConstructor:\t" << this << endl;
+	}
+	ForwardList(ForwardList&& other)
+	{
+		this->Head = other.Head;
+		this->size = other.size;
+		other.Head = nullptr;
+		cout << "FLMoveConstructor:\t" << this << endl;
+	}
 	~ForwardList()
 	{
 		while (Head != nullptr)pop_front();
@@ -84,6 +105,22 @@ public:
 	}
 
 	//			Operators:
+	ForwardList& operator=(const ForwardList& other)
+	{
+		if (this == &other)return *this;
+		while (Head)pop_front();
+		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)push_back(Temp->Data);
+		cout << "FLCopyAssignment:\t" << this << endl;
+		return *this;
+	}
+	ForwardList& operator=(ForwardList&& other)
+	{
+		this->Head = other.Head;
+		this->size = other.size;
+		other.Head = nullptr;
+		cout << "FLMoveAssignemtn:\t" << this << endl;
+		return *this;
+	}
 	int& operator[](int Index)
 	{
 		Element* Temp = Head;
@@ -211,7 +248,17 @@ public:
 		}
 		cout << "Количество элементов списка: " << size << endl;
 	}
+
+	friend ForwardList operator+(const ForwardList& left, const ForwardList& right);
 };
+
+ForwardList operator+(const ForwardList& left, const ForwardList& right)
+{
+	ForwardList result = left;
+	for (Element* Temp = right.Head; Temp; Temp = Temp->pNext)
+		result.push_back(Temp->Data);
+	return result;
+}
 
 void main()
 {
@@ -275,16 +322,19 @@ void main()
 
 #ifdef CONSTRUCTORS_CHECK
 	ForwardList fl1 = { 3, 5, 8, 13, 21 };	//initializer_list constructor
+	fl1 = fl1;
 	for (int i = 0; i < fl1.get_size(); i++)
 		cout << fl1[i] << tab;
 	cout << endl;
-	ForwardList fl2 = fl1;	//Copy constructor
+	ForwardList fl2;
+	fl2 = fl1;	//Copy constructor
+
 	fl2.print();
 #endif // CONSTRUCTORS_CHECK
 
 #ifdef OPERATORS_CHECK
 	ForwardList fl1 = { 3, 5, 8, 13, 21 };
-	ForwardList fl2 = { 34, 55, 89 };
+	ForwardList fl2 = { 34, 55, 89, 144 };
 	for (int i = 0; i < fl1.get_size(); i++)
 	{
 		cout << fl1[i] << tab;
@@ -299,5 +349,6 @@ void main()
 	ForwardList fl3;
 	fl3 = fl1 + fl2;
 	fl3.print();
+	cout << sizeof(Element) << endl;
 #endif
 }
