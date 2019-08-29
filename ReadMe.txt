@@ -1,4 +1,8 @@
 TODO:
+1. Создать ветку Separated от master, и в ней вынести класс в отдельные файлы.
+2. Создать ветку Separated от Templated, и в ней вынести шаблонный класс в отдельные файлы.
+
+TODO:
 
 CopyConstructor;
 CopyAssignment;
