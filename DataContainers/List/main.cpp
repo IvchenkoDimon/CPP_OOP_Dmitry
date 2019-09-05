@@ -88,6 +88,7 @@ void main()
 {
 	setlocale(LC_ALL, "");
 	int n = 5;
+	cout << "Hello Git" << endl;
 	cout << "¬ведите размер списка: "; cin >> n;
 	List list;
 	for (int i = 0; i < n; i++)
