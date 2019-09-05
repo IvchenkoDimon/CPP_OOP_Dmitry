@@ -1,4 +1,6 @@
-TODO:
+TODO: HARDCORE_CHECK
+
+DONE:
 В двусвязный список добавить методы:
 pop_front();
 pop_back();
