@@ -1,4 +1,10 @@
-TODO: HARDCORE_CHECK
+TODO:
+CopyConstructor
+CopyAssignment
+MoveConstructor
+MoveAssignment
+
+DONE: HARDCORE_CHECK
 
 DONE:
 В двусвязный список добавить методы:
