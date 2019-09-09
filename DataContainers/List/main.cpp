@@ -23,24 +23,125 @@ class List
 		{
 			cout << "EDestructor:\t\t" << this << endl;
 		}
+		/*const int operator*() const
+		{
+			return this->Data;
+		}
+		
+		int operator*()
+		{
+			return this->Data;
+		}*/
+		operator int()
+		{
+			return this->Data;
+		}
 		friend class List;
 	};
 	Element* Head;
 	Element* Tail;
 	int size;
 public:
+	class Iterator
+	{
+		Element* Temp;
+	public:
+		Iterator(Element* Temp = nullptr)
+		{
+			this->Temp = Temp;
+			cout << "ITConstructor:\t\t" << this << endl;
+		}
+		~Iterator()
+		{
+			cout << "ITDestructor:\t\t" << this << endl;
+		}
+		Iterator& operator++()
+		{
+			Temp = Temp->pNext;
+			return *this;
+		}
+		int operator*()
+		{
+			return Temp->Data;
+		}
+		bool operator==(const Iterator& other)
+		{
+			return this->Temp == other.Temp;
+		}
+		bool operator!=(const Iterator& other)
+		{
+			return this->Temp != other.Temp;
+		}
+	};
+	int get_size() const
+	{
+		return this->size;
+	}
+	const Iterator begin() const
+	{
+		return this->Head;
+	}
+	Iterator begin()
+	{
+		return this->Head;
+	}
+	const Iterator end() const
+	{
+		return nullptr;
+	}
+	Iterator end()
+	{
+		return nullptr;
+	}
 	List()
 	{
 		Head = Tail = nullptr;
 		size = 0;
 		cout << "LConstructor:\t\t" << this << endl;
 	}
+	List(initializer_list<int> il) :List()
+	{
+		for (const int* it = il.begin();it!=il.end();it++)
+		{
+			push_back(*it);
+		}
+	}
 	~List()
 	{
 		while (Head)pop_front();
 		cout << "LDestructor:\t\t" << this << endl;
 	}
-
+	//			Operators:
+	int& operator[](int Index)
+	{
+		Element* Temp;
+		if (Index < size / 2)
+		{
+			Temp = Head;
+			for (int i = 0; i < Index; i++)Temp = Temp->pNext;
+		}
+		else
+		{
+			Temp = Tail;
+			for (int i = size - 1; i > Index; i--)Temp = Temp->pPrev;
+		}
+		return Temp->Data;
+	}
+	const int& operator[](int Index) const
+	{
+		Element* Temp;
+		if (Index < size / 2)
+		{
+			Temp = Head;
+			for (int i = 0; i < Index; i++)Temp = Temp->pNext;
+		}
+		else
+		{
+			Temp = Tail;
+			for (int i = size - 1; i > Index; i--)Temp = Temp->pPrev;
+		}
+		return Temp->Data;
+	}
 	//			Adding elements:
 	void push_front(int Data)
 	{
@@ -68,7 +169,6 @@ public:
 		Tail->pNext = New;
 		Tail = New;
 	}
-
 	void insert(int Index, int Data)
 	{
 		if (Index == 0)
@@ -100,7 +200,6 @@ public:
 		Temp->pPrev = Temp->pPrev->pNext = new Element(Data, Temp, Temp->pPrev);
 		size++;
 	}
-
 	//			Removing elements:
 	void pop_front()
 	{
@@ -115,7 +214,6 @@ public:
 		Head->pPrev = nullptr;
 		size--;
 	}
-
 	void pop_back()
 	{
 		if (Head == Tail)
@@ -211,10 +309,20 @@ void main()
 #endif // BASE_CHECK
 #ifdef CONSTRUCTORS_CHECK
 	List lst1 = { 3,5,8,13,21 };
-	for (int i = 0; i < lst1.get.size(); i++)
+	lst1.print();
+	/*for (int i = 0; i < lst1.get_size(); i++)
 		cout << lst1[i] << tab;
+	cout << endl;*/
+	/*for (int i = 0; i < lst1.get_size(); i++)lst1[i] = rand() % 100;*/
+	for (int i = 0; i < lst1.get_size(); i++)
+		cout << lst1[i] << tab;
+	for (int i : lst1)
+	{
+		cout << i << tab;
+	}
 	cout << endl;
-	List lst2 = { 34,55,89 };
+
+	/*List lst2 = { 34,55,89 };
 	for (int i = 0; i < lst2.get.size(); i++)
 		cout << lst2[i] << tab;
 	cout << endl;
@@ -223,7 +331,7 @@ void main()
 	{
 		cout << i << tab;
 	}
-	cout << endl;
+	cout << endl;*/
 
 
 #endif // CONSTRUCTORS_CHECK
