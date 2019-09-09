@@ -60,7 +60,11 @@ public:
 			Temp = Temp->pNext;
 			return *this;
 		}
-		int operator*()
+		const int& operator*() const
+		{
+			return Temp->Data;
+		}
+		int& operator*()
 		{
 			return Temp->Data;
 		}
