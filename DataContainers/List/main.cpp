@@ -17,15 +17,8 @@ class List
 		Element<T>* pNext;
 		Element<T>* pPrev;
 	public:
-		Element(T Data, Element<T>* pNext = nullptr, Element<T>* pPrev = nullptr) :
-			Data(Data), pNext(pNext), pPrev(pPrev)
-		{
-			cout << "EConstructor:\t\t" << this << endl;
-		}
-		~Element()
-		{
-			cout << "EDestructor:\t\t" << this << endl;
-		}
+		Element(T Data, Element<T>* pNext = nullptr, Element<T>* pPrev = nullptr);
+		~Element();
 		/*const int operator*() const
 		{
 			return this->Data;
@@ -35,10 +28,7 @@ class List
 		{
 			return this->Data;
 		}*/
-		operator T&()
-		{
-			return this->Data;
-		}
+		operator T&();
 		friend class List<T>;
 	};
 	Element<T>* Head;
@@ -49,43 +39,14 @@ public:
 	{
 		Element<T>* Temp;
 	public:
-		Iterator(Element<T>* Temp = nullptr)
-		{
-			this->Temp = Temp;
-			cout << "ITConstructor:\t\t" << this << endl;
-		}
-		~Iterator()
-		{
-			cout << "ITDestructor:\t\t" << this << endl;
-		}
-		Iterator& operator++()
-		{
-			Temp = Temp->pNext;
-			return *this;
-		}
-		Iterator operator++(int)
-		{
-			Iterator old = this;
-			Temp = Temp->pNext;
-			return old;
-		}
-
-		const T& operator*() const
-		{
-			return Temp->Data;
-		}
-		T& operator*()
-		{
-			return Temp->Data;
-		}
-		bool operator==(const Iterator& other) const
-		{
-			return this->Temp == other.Temp;
-		}
-		bool operator!=(const Iterator& other) const
-		{
-			return this->Temp != other.Temp;
-		}
+		Iterator(Element<T>* Temp = nullptr);
+		~Iterator();
+		Iterator& operator++();
+		//Iterator operator++(int);
+		const T& operator*() const;
+		T& operator*();
+		bool operator==(const Iterator& other) const;
+		bool operator!=(const Iterator& other) const;
 	};
 	int get_size() const
 	{
@@ -285,6 +246,69 @@ public:
 	}
 };
 
+	template<typename T>template<typename ET>List<T>::Element<ET>::Element(ET Data, List<T>::Element<ET>* pNext, List<T>::Element<ET>* pPrev) :
+		Data(Data), pNext(pNext), pPrev(pPrev)
+	{
+		cout << "EConstructor:\t\t" << this << endl;
+	}
+	template<typename T>template<typename ET>List<T>::Element<ET>::~Element()
+	{
+		cout << "EDestructor:\t\t" << this << endl;
+	}
+	/*const int operator*() const
+	{
+		return this->Data;
+	}
+
+	int operator*()
+	{
+		return this->Data;
+	}*/
+	template<typename T>template<typename ET>List<T>::Element<ET>::operator ET&()
+	{
+		return this->Data;
+	}
+	
+	template<typename T>List<T>::Iterator::Iterator(Element<T>* Temp)
+	{
+		this->Temp = Temp;
+		cout << "ITConstructor:\t\t" << this << endl;
+	}
+	template<typename T>List<T>::Iterator::~Iterator()
+	{
+		cout << "ITDestructor:\t\t" << this << endl;
+	}
+	template<typename T>List<T>::Iterator& List<T>::Iterator::operator++()
+	{
+		Temp = Temp->pNext;
+		return *this;
+	}
+	template<typename T>List<T>::Iterator& List<T>::Iterator::Iterator::operator++(int)
+	{
+		Iterator old = this;
+		Temp = Temp->pNext;
+		return old;
+	}
+	template<typename T>
+	const T& List<T>::Iterator::operator*() const
+	{
+		return Temp->Data;
+	}
+	template<typename T>
+	T& List<T>::Iterator::operator*()
+	{
+		return Temp->Data;
+	}
+	template<typename T>
+	bool List<T>::Iterator::operator==(const Iterator& other) const
+	{
+		return this->Temp == other.Temp;
+	}
+	template<typename T>
+	bool List<T>::Iterator::operator!=(const Iterator& other) const
+	{
+		return this->Temp != other.Temp;
+	}
 void main()
 {
 	setlocale(LC_ALL, "");
