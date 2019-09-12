@@ -6,15 +6,18 @@ using namespace std;
 //#define BASE_CHECK
 #define CONSTRUCTORS_CHECK
 
+
+template<typename T>
 class List
 {
+	template<typename T>
 	class Element
 	{
-		int Data;
-		Element* pNext;
-		Element* pPrev;
+		T Data;
+		Element<T>* pNext;
+		Element<T>* pPrev;
 	public:
-		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr) :
+		Element(T Data, Element<T>* pNext = nullptr, Element<T>* pPrev = nullptr) :
 			Data(Data), pNext(pNext), pPrev(pPrev)
 		{
 			cout << "EConstructor:\t\t" << this << endl;
@@ -32,21 +35,21 @@ class List
 		{
 			return this->Data;
 		}*/
-		operator int()
+		operator T&()
 		{
 			return this->Data;
 		}
-		friend class List;
+		friend class List<T>;
 	};
-	Element* Head;
-	Element* Tail;
+	Element<T>* Head;
+	Element<T>* Tail;
 	int size;
 public:
 	class Iterator
 	{
-		Element* Temp;
+		Element<T>* Temp;
 	public:
-		Iterator(Element* Temp = nullptr)
+		Iterator(Element<T>* Temp = nullptr)
 		{
 			this->Temp = Temp;
 			cout << "ITConstructor:\t\t" << this << endl;
@@ -60,19 +63,26 @@ public:
 			Temp = Temp->pNext;
 			return *this;
 		}
-		const int& operator*() const
+		Iterator operator++(int)
+		{
+			Iterator old = this;
+			Temp = Temp->pNext;
+			return old;
+		}
+
+		const T& operator*() const
 		{
 			return Temp->Data;
 		}
-		int& operator*()
+		T& operator*()
 		{
 			return Temp->Data;
 		}
-		bool operator==(const Iterator& other)
+		bool operator==(const Iterator& other) const
 		{
 			return this->Temp == other.Temp;
 		}
-		bool operator!=(const Iterator& other)
+		bool operator!=(const Iterator& other) const
 		{
 			return this->Temp != other.Temp;
 		}
@@ -116,9 +126,9 @@ public:
 		cout << "LDestructor:\t\t" << this << endl;
 	}
 	//			Operators:
-	int& operator[](int Index)
+	T& operator[](int Index)
 	{
-		Element* Temp;
+		Element<T>* Temp;
 		if (Index < size / 2)
 		{
 			Temp = Head;
@@ -131,9 +141,9 @@ public:
 		}
 		return Temp->Data;
 	}
-	const int& operator[](int Index) const
+	const T& operator[](int Index) const
 	{
-		Element* Temp;
+		Element<T>* Temp;
 		if (Index < size / 2)
 		{
 			Temp = Head;
@@ -147,9 +157,9 @@ public:
 		return Temp->Data;
 	}
 	//			Adding elements:
-	void push_front(int Data)
+	void push_front(T Data)
 	{
-		Element* New = new Element(Data);
+		Element<T>* New = new Element<T>(Data);
 		if (Head == nullptr && Tail == nullptr)
 		{
 			Head = Tail = New;
@@ -160,9 +170,9 @@ public:
 		Head = New;
 		size++;
 	}
-	void push_back(int Data)
+	void push_back(T Data)
 	{
-		Element* New = new Element(Data);
+		Element<T>* New = new Element<T>(Data);
 		size++;
 		if (Head == nullptr && Tail == nullptr)
 		{
@@ -173,7 +183,7 @@ public:
 		Tail->pNext = New;
 		Tail = New;
 	}
-	void insert(int Index, int Data)
+	void insert(int Index, T Data)
 	{
 		if (Index == 0)
 		{
@@ -185,7 +195,7 @@ public:
 			push_back(Data);
 			return;
 		}
-		Element* Temp;
+		Element<T>* Temp;
 		if (Index < size / 2)
 		{
 			Temp = Head;
@@ -201,7 +211,7 @@ public:
 		New->pPrev = Temp->pPrev;
 		Temp->pPrev->pNext = New;
 		Temp->pPrev = New;*/
-		Temp->pPrev = Temp->pPrev->pNext = new Element(Data, Temp, Temp->pPrev);
+		Temp->pPrev = Temp->pPrev->pNext = new Element<T>(Data, Temp, Temp->pPrev);
 		size++;
 	}
 	//			Removing elements:
@@ -231,7 +241,7 @@ public:
 		Tail->pNext = nullptr;
 		size--;
 	}
-	void erase(int Index)
+	void erase(T Index)
 	{
 		if (Index == 0)
 		{
@@ -244,7 +254,7 @@ public:
 			return;
 		}
 		if (Head == nullptr || Head == Tail)return;
-		Element* Temp;
+		Element<T>* Temp;
 		if (Index < size / 2)
 		{
 			Temp = Head;
@@ -263,13 +273,13 @@ public:
 
 	void print()
 	{
-		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
+		for (Element<T>* Temp = Head; Temp; Temp = Temp->pNext)
 			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 		cout << "В списке " << size << " элементов." << endl;
 	}
 	void print_reverse()
 	{
-		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
+		for (Element<T>* Temp = Tail; Temp; Temp = Temp->pPrev)
 			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 		cout << "В списке " << size << " элементов." << endl;
 	}
@@ -312,7 +322,7 @@ void main()
 	list.print_reverse();
 #endif // BASE_CHECK
 #ifdef CONSTRUCTORS_CHECK
-	List lst1 = { 3,5,8,13,21 };
+	List<int> lst1 = { 3,5,8,13,21 };
 	lst1.print();
 	/*for (int i = 0; i < lst1.get_size(); i++)
 		cout << lst1[i] << tab;
