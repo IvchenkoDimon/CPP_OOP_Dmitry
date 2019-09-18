@@ -20,6 +20,10 @@ class Tree
 		{
 			cout << "EDestructor:\t" << this << endl;
 		}
+		bool is_leaf()
+		{
+			return pLeft == pRight;
+		}
 		friend class Tree;
 	} *Root;
 public:
@@ -32,6 +36,14 @@ public:
 	{
 		Root = nullptr;
 		cout << "TConstructor:\t" << this << endl;
+	}
+	Tree(initializer_list<int> il) :Tree()
+	{
+		cout << typeid(il.begin()).name() << endl;
+		for (int const* it = il.begin(); it != il.end(); it++)
+		{
+			insert(*it);
+		}
 	}
 	~Tree()
 	{
@@ -63,6 +75,21 @@ public:
 	{
 		if (Root == nullptr)return 0;
 		return count(Root->pLeft) + count(Root->pRight) + 1;
+	}
+
+	int sum()
+	{
+		return sum(this->Root);
+	}
+	int sum(Element* Root)
+	{
+		if (Root == nullptr)return 0;
+		return sum(Root->pLeft) + sum(Root->pRight) + Root->Data;
+	}
+
+	double avg()
+	{
+		return (double)sum() / count();
 	}
 
 	void clear()
@@ -121,6 +148,38 @@ public:
 		}
 	}
 
+	void erase(int Data)
+	{
+		erase(Data, this->Root);
+	}
+	void erase(int Data, Element*& Root)
+	{
+		if (Root == nullptr)return;
+		if (Root->Data == Data)
+		{
+			if (Root->is_leaf())
+			{
+				delete Root;
+				Root = nullptr;
+				return;
+			}
+			else
+			{
+				if (Root->pLeft)
+				{
+					Root->Data = getMaxValue(Root->pLeft);
+					erase(getMaxValue(Root->pLeft), Root->pLeft);
+				}
+				else
+				{
+					Root->Data = getMinValue(Root->pRight);
+					erase(getMinValue(Root->pRight), Root->pRight);
+				}
+			}
+		}
+		erase(Data, Root->pLeft);
+		erase(Data, Root->pRight);
+	}
 
 
 	void clear(Element* Root)
@@ -154,4 +213,13 @@ void main()
 	cout << "Минимальное значение в дереве: " << tree.getMinValue() << endl;
 	cout << "Максимальное значение в дереве: " << tree.getMaxValue() << endl;
 	cout << "Количество элеементов в дереве: " << tree.count() << endl;
+	cout << "Сумма всех элементов дерева: " << tree.sum() << endl;
+	cout << "Среднее арифметическое элементов дерева: " << tree.avg() << endl;
+	int Data;
+	cout << "Введите удаляемое значение: "; cin >> Data;
+	tree.erase(Data);
+	tree.print();
+
+	Tree tr2 = { 3, 5, 8, 13, 21 };
+	tr2.print();
 }
