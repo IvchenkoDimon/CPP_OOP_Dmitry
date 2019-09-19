@@ -1,6 +1,10 @@
 #include<iostream>
 using namespace std;
 
+#define BASE_CHECK
+#define COPY_CONSTRUCTOR_CHECK
+
+
 class Tree
 {
 	class Element
@@ -45,38 +49,53 @@ public:
 			insert(*it);
 		}
 	}
+	Tree(const Tree& other)
+	{
+		CopyTree(this->Root, other.Root);
+		cout << "TCopyConstructor:\t" << this << endl;
+	}
 	~Tree()
 	{
 		clear(this->Root);
 		cout << "TDestructor:\t" << this << endl;
 	}
+	Tree& operator=(const Tree& other)
+	{
+		clear();
+		CopyTree(this->Root, other.Root);
+		cout << "TCopyAssigment:\t" << this << endl;
+		return *this;
 
+	}
+	void CopyTree(Element*& lRoot, Element* rRoot)
+	{
+		if (rRoot == nullptr)return;
+		lRoot = new Element(rRoot->Data);
+		CopyTree(lRoot->pLeft, rRoot->pLeft);
+		CopyTree(lRoot->pRight, rRoot->pRight);
+		
+	}
 	void insert(int Data)
 	{
 		insert(Data, this->Root);
 	}
-
 	int getMinValue()
 	{
 		return getMinValue(this->Root);
 	}
-
 	int getMaxValue()
 	{
 		return getMaxValue(this->Root);
 	}
-
 	int count()
 	{
 		return count(this->Root);
 	}
-
 	int count(Element* Root)
 	{
 		if (Root == nullptr)return 0;
 		return count(Root->pLeft) + count(Root->pRight) + 1;
 	}
-
 	int sum()
 	{
 		return sum(this->Root);
@@ -86,36 +105,30 @@ public:
 		if (Root == nullptr)return 0;
 		return sum(Root->pLeft) + sum(Root->pRight) + Root->Data;
 	}
-
 	double avg()
 	{
 		return (double)sum() / count();
 	}
-
 	void clear()
 	{
 		clear(this->Root);
 		this->Root = nullptr;
 	}
-
 	void print()
 	{
 		print(this->Root);
 		cout << endl;
 	}
-
 	int getMinValue(Element* Root)
 	{
 		if (Root->pLeft == nullptr)return Root->Data;
 		return getMinValue(Root->pLeft);
 	}
-
 	int getMaxValue(Element* Root)
 	{
 		if (Root->pRight == nullptr)return Root->Data;
 		return getMaxValue(Root->pRight);
 	}
-
 	void insert(int Data, Element* Root)
 	{
 		if (this->Root == nullptr)
@@ -147,7 +160,6 @@ public:
 			}
 		}
 	}
-
 	void erase(int Data)
 	{
 		erase(Data, this->Root);
@@ -180,8 +192,6 @@ public:
 		erase(Data, Root->pLeft);
 		erase(Data, Root->pRight);
 	}
-
-
 	void clear(Element* Root)
 	{
 		if (Root == nullptr)return;
@@ -189,7 +199,6 @@ public:
 		clear(Root->pRight);
 		delete Root;
 	}
-
 	void print(Element* Root)
 	{
 		if (Root == nullptr)return;
@@ -220,6 +229,10 @@ void main()
 	tree.erase(Data);
 	tree.print();
 
-	Tree tr2 = { 3, 5, 8, 13, 21 };
-	tr2.print();
+	/*Tree tr2 = { 3, 5, 8, 13, 21 };
+	tr2.print();*/
+
+	Tree tree2 = tree;
+	tree2 = tree;
+	tree2.print();
 }
