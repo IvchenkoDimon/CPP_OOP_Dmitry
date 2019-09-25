@@ -1,15 +1,19 @@
 #include <iostream>
 #include <array>
 #include <vector>
+#include <deque>
+#include <forward_list>
 using namespace std;
 
 #define tab "\t"
 //#define STL_ARRAY
-#define STL_VECTOR
-
+//#define STL_VECTOR
+//#define STL_DEQUE
+#define STL_FORWARD_LIST
 void main()
 {
 	setlocale(LC_ALL, " ");
+
 #ifdef STL_ARRAY
 	int Arr[] = { 3,5,8,13,21 };
 	array<int, 5> arr = { 3,5,8,13,21 };
@@ -30,9 +34,8 @@ void main()
 	delete d_arr;*/
 	for (int i : arr)cout << i << "\t"; cout << endl;
 #endif // STL_ARRAY
-
 #ifdef STL_VECTOR
-	vector<int> vec = {0,1,1,2,3,5,8,13,21,34};
+	vector<int> vec = { 0,1,1,2,3,5,8,13,21,34 };
 	for (int i = 0; i < vec.size(); i++)
 	{
 		cout << vec[i] << tab;
@@ -51,7 +54,7 @@ void main()
 	}
 	cout << endl;
 	//Var2 Вывод с конца массива - Вариант класса.
-	for (vector<int>::iterator it = vec.end()-1;/* it != vec.begin()*/; it--)
+	for (vector<int>::iterator it = vec.end() - 1;/* it != vec.begin()*/; it--)
 	{
 		cout << *it << tab;
 		if (it == vec.begin())break;
@@ -81,7 +84,7 @@ void main()
 	cout << "Введите значение добавляемого элемента: "; cin >> data;
 	//Вариант 1
 	vector<int>::iterator position = vec.begin() + index;
-	vec.insert(position, 5 ,data);
+	vec.insert(position, 5, data);
 	for (int i : vec)cout << i << tab; cout << endl;
 	////Вариант 2
 	//vec.insert(vec.begin() + index, data);
@@ -92,4 +95,28 @@ void main()
 	//cout << endl;
 
 #endif // STL_VECTOR
+#ifdef STL_DEQUE
+	deque<int> dq = { 3,5,8,13,21 };
+	for (int i = 0; i < dq.size(); i++)
+	{
+		cout << dq[i] << tab;
+	}
+	cout << endl;
+
+	dq.insert(dq.begin(), { 0,1,1 });
+	dq.insert(dq.end(), { 34,55,89 });
+	for (deque<int>::iterator it = dq.begin(); it != dq.end(); it++)
+	{
+		cout << *it << tab;
+	}
+#endif // STL_DEQUE
+#ifdef STL_FORWARD_LIST
+	//forward_list - это контейнер, который хранит данные в виде односвязного списка.
+	forward_list<int> fl(5);
+	for (int i : fl) cout << i << tab; cout << endl;
+
+
+
+#endif // STL_FORWARD_LIST
+
 }
