@@ -3,16 +3,20 @@
 #include <vector>
 #include <deque>
 #include <forward_list>
+#include <list>
 using namespace std;
+
+
 
 #define tab "\t"
 //#define STL_ARRAY
 //#define STL_VECTOR
 //#define STL_DEQUE
-#define STL_FORWARD_LIST
+//#define STL_FORWARD_LIST
+#define STL_LIST
 void main()
 {
-	setlocale(LC_ALL, " ");
+	setlocale(LC_ALL, "");
 
 #ifdef STL_ARRAY
 	int Arr[] = { 3,5,8,13,21 };
@@ -113,10 +117,62 @@ void main()
 #ifdef STL_FORWARD_LIST
 	//forward_list - это контейнер, который хранит данные в виде односвязного списка.
 	forward_list<int> fl(5);
+	fl.push_front(123);
 	for (int i : fl) cout << i << tab; cout << endl;
-
-
-
+	//fl.insert_after(fl.before_begin(), { 0,1,1,2 });
+	//for (int i : fl) cout << i << tab; cout << endl;
+	int index;
+	int data;
+	cout << "Введите индекс добавляемого елемента: "; cin >> index;
+	cout << "Введите значение добавляемого елемента: "; cin >> data;
+	forward_list<int>::iterator position = fl.before_begin();
+	for (int i = 0; i < index; i++)position++;
+	fl.insert_after(position, data);
+	for (int i : fl) cout << i << tab; cout << endl;
 #endif // STL_FORWARD_LIST
+#ifdef STL_LIST
+	//list<int> my_list{ 3,5,8,13,21 };
+	//my_list.resize(8); // Изменение размера списка.
+	//for (int i : my_list)cout << i << tab; cout << endl; // Вывод списка на экран.
+	//cout << my_list.size() << endl; // Размер текущего списка.
+	//cout << my_list.max_size() << endl; // Максимальный размер двухсвязного списка
+	//cout << forward_list<int>().max_size() << endl; // // Максимальный размер односвязного списка
+
+	//list<int> list1 = { 3,5,8,13,21 };
+	//list<int> list2 = { 34,55,89 };
+	//for (int i : list1)cout << i << tab; cout << endl;
+	//for (int i : list2)cout << i << tab; cout << endl;
+	//// splice
+	//list<int>::iterator position = list2.begin();
+	//position++;
+
+	//list1.splice(list1.end(), list2, position);
+	//for (int i : list1)cout << i << tab; cout << endl;
+	//for (int i : list2)cout << i << tab; cout << endl;
+
+	list<int> my_list(10);
+	for (list<int>::iterator it = my_list.begin(); it != my_list.end(); it++)*it = rand() % 10;
+	for (int i : my_list)
+	{
+
+		cout << i << tab;
+	}
+	cout << endl;
+	cout << "size:\t" << my_list.size() << endl;
+	//my_list.remove(4); //Удаление всех значений 4;
+	//Лямбда выражение__________________________________________________________
+	for (list<int>::iterator it = my_list.begin(); it != my_list.end(); it++)
+	{
+		//*it = rand() % 10;
+		my_list.remove_if([it](int num)->bool {return num % 2 == 0; });
+	}
+	for (int i : my_list)
+	{
+		cout << i << tab;
+	}
+	cout << endl;
+	cout << "size:\t" << my_list.size() << endl;
+
+#endif // STL_LIST
 
 }
